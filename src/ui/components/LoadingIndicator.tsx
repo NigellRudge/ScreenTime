@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import Theme from "../../utils/theme";
+import RenderIf from './RenderIf';
 
 type Props = {
     active:boolean
@@ -9,9 +10,9 @@ type Props = {
 const {colors,screenWidth, screenHeight} = Theme
 const LoadingIndicator = ({active}:Props) => {
     return (
-        <View>
-            {active && <ActivityIndicator size='large' color={colors.primary} style={styles.loadingContainer}/> }
-        </View>
+        <RenderIf render={active}>
+            <ActivityIndicator animating={true} size='large' color={colors.light} style={styles.loadingContainer}/>
+        </RenderIf>
     );
 };
 

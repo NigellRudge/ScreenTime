@@ -6,12 +6,15 @@ export enum ImageSizes {
 }
 
 export enum MediaTypes {
-    MOVIE = 1,
-    SHOW = 2,
-    ACTOR = 3,
-    IMAGE = 4,
-    ALL = 5
+    MOVIE = 'movie',
+    SHOW = 'show',
+    ACTOR = 'actor',
+    IMAGE = 'image',
+    ALL = 'all',
+    TRENDING = 'trending'
 }
+
+
 
 export const API_KEY = 'a28d205a378cece6baa18ba20119765b'
 export const BASE_URL = 'https://api.themoviedb.org/3/'

@@ -12,7 +12,6 @@ interface IProps {
 const RatingComponent = ({rating,size}:IProps) => {
   rating = formatRating(rating);
   const remaning = 5 - rating;
-  console.log(rating)
   return (
     <View style={{flexDirection:'row', paddingVertical:5, paddingHorizontal:5}}>
             {Array(rating).fill(1).map((item,index)=>{

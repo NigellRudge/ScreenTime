@@ -5,6 +5,8 @@ import { ImageSizes, MediaTypes, MEDIA_URL } from "./config";
 import { Backdrop } from "../data/models/Backdrop";
 import { Poster } from "../data/models/Poster";
 import { Genre } from "../data/models/Genre";
+import { TrendingItem } from "../data/models/Trending";
+import { MovieDetail } from "../data/models/MovieDetail";
 
 export function GetMediaUrl (input:string, size: ImageSizes = ImageSizes.NORMAL):string{
     return `${MEDIA_URL}${size}/${input}`
@@ -29,7 +31,7 @@ export function GetEpisodeShortCode(input:Episode | Episode[]): Episode | Episod
 }
 
 
-export function AddMediaUrlToPoster(input:Movie|Show):Movie|Show{
+export function AddMediaUrlToPoster(input:Movie|Show|MovieDetail):Movie|Show|MovieDetail{
     input.poster_path = GetMediaUrl(input.poster_path)
     return input;
 }
@@ -41,7 +43,7 @@ export function AddMediaUrlToPosterMultiple(input:Movie[]|Show[]):Show[]|Movie[]
     return input;
 }
 
-export function AddMediaUrlToBackdrop(input:Movie|Show):Movie|Show{
+export function AddMediaUrlToBackdrop(input:Movie|Show|MovieDetail):Movie|Show|MovieDetail{
     input.backdrop_path = GetMediaUrl(input.backdrop_path!)
     return input;
 }
@@ -89,3 +91,14 @@ export function filterGenreArray(genreArray: Genre[], inputArray:number[]){
     return outputArray;
 }
 
+export function AddPosterToTrending(item: TrendingItem):TrendingItem{
+    item.poster_path = GetMediaUrl(item.poster_path)
+    return item;
+}
+
+export function AddPosterToTrendingMultiple(inputArray: TrendingItem[]):TrendingItem[]{
+    for(let item of inputArray){
+        item.poster_path = GetMediaUrl(item.poster_path)
+    }
+    return inputArray;
+}

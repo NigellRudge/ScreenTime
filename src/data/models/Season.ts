@@ -10,7 +10,7 @@ export interface SeasonShort {
     season_number: number
   }
 
-  export interface ShowdDetail {
+  export interface Season {
     _id: string
     air_date: string
     episodes: Episode[]

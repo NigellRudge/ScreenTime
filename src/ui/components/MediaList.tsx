@@ -7,37 +7,40 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MediaTypes } from '../../utils/config'
 import FastImage from 'react-native-fast-image'
 import AnimatedPressable from './AnimatedPressable'
+import { TrendingItem } from '../../data/models/Trending'
 
 interface ListProps {
-    onPress: (itemId:number)=>void,
+    onItemPress: (itemId:number, type?:MediaTypes)=>void,
     label:string,
-    showIcon:boolean,
-    items: Movie[]|Show[],
-    type: MediaTypes
+    items: Movie[]|Show[]|TrendingItem[],
+    type: MediaTypes,
+    onMorePress?: (type:any)=>void
 }
 
 interface ItemProps {
-    item: Movie | Show
+    item: Movie | Show |TrendingItem
     type:MediaTypes
-    onPress: (itemId:number)=>void
+    onPress: (itemId:number, type?:MediaTypes)=>void
 }
 
-const MediaList = ({items, onPress, label, showIcon=true, type=MediaTypes.MOVIE}:ListProps)=> {
+const MediaList = ({items, onItemPress, label,onMorePress, type=MediaTypes.MOVIE}:ListProps)=> {
     
   return (
     <View style={styles.listContainer}>
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>{label}</Text>
-                {/* {showIcon && <Ionicons name='arrow-forward' color={Theme.colors.primary} size={30}  />} */}
+                <AnimatedPressable containerStyle={{justifyContent:'center', alignContent:'center'}} handler={(onMorePress!)} >
+                    <Text style={{fontSize:Theme.textSize.h5, color:Theme.colors.light, fontWeight:'700'}}>See all</Text>
+                </AnimatedPressable>
             </View>
-            <FlatList<Movie|Show>
+            <FlatList<Movie|Show|TrendingItem>
                 data={items}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item)=>item.id.toString()}
                 horizontal={true}
                 renderItem={ ({item}) =>{
-                    return <Item item={item} type={type} onPress={onPress} />
+                    return <Item item={item} type={type} onPress={onItemPress} />
                 }}
             />
         </View>
@@ -47,15 +50,16 @@ export default MediaList;
 
 
 const Item = ({item, onPress, type}:ItemProps)=>{
-    const title = type == MediaTypes.MOVIE ? (item as Movie).title : (item as Show).name
     const {vote_average, poster_path} = item
+    if(type == MediaTypes.TRENDING){
+        item = item as TrendingItem
+    }
     return(
         <View style={styles.container}>
             <View style={styles.ratingContainer}>
                 <Text style={styles.rating}>{vote_average}</Text>
             </View>
-            <View style={{height:20}} />
-            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id)}>
+            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id,type)}>
                 <FastImage style={styles.image} source={{uri:poster_path}}/>
             </AnimatedPressable>
         </View>
@@ -66,20 +70,23 @@ const styles = StyleSheet.create({
     listContainer: {
         flex:1,
         width: Theme.screenWidth,
-        height:320,
-        paddingEnd: 25,
+        height:260,
+        paddingHorizontal:5,
         flexDirection:'column',
     },
     container:{
         flex:1,
-        width: 150,
-        height:320,
+        width: 140,
+        height:240,
         marginRight:5,
         flexDirection:'column',
     },
     labelContainer:{
         justifyContent:'space-between',
-        flexDirection:'row'
+        flexDirection:'row',
+        paddingEnd:15,
+        marginBottom:5,
+        width:'100%'
     },
     label:{
         fontWeight:'700',
@@ -87,15 +94,15 @@ const styles = StyleSheet.create({
         color:Theme.colors.light
     },
     itemContainer:{
-        width: 150,
-        height:250,
+        width: 140,
+        height:230,
         overflow:'hidden',
-        borderRadius:8,
+        borderRadius:12,
         flexDirection:'column',
         backgroundColor: Theme.colors.backgroundColor2
     },
     image:{
-        width: 150,
+        width: 140,
         height:'100%',
     },
     rating:{
@@ -117,16 +124,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     ratingContainer:{
-        zIndex:10,
         position:'absolute',
-        top:10,
-        right: '40%',
-        width:35,
-        height:35,
-        alignItems:'center',
-        justifyContent: 'center',
-        padding:8,
-        borderRadius: 100,
-        backgroundColor: Theme.colors.primary
+        top:5,
+        left:5,
+        zIndex:20,
+        borderRadius:5,
+        padding:5,
+        backgroundColor:Theme.colors.primary
     }
 })

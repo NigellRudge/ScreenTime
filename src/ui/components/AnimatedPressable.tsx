@@ -2,13 +2,14 @@ import React from 'react';
 import {Animated, Pressable, StyleProp, ViewStyle} from 'react-native';
 import { Movie } from '../../data/models/Movie';
 import { Show } from '../../data/models/Show';
+import {MediaTypes} from '../../utils/config';
 
 const AnimatedPress = Animated.createAnimatedComponent(Pressable)
 
 type IPros = {
     containerStyle: StyleProp<ViewStyle>,
     children: JSX.Element[] | JSX.Element | null,
-    handler: (item:any) => void
+    handler?: (item:any, type?:MediaTypes) => void
     item?: Movie | Show
 }
 const AnimatedPressable = ({children, handler, item, containerStyle}:IPros) => {
@@ -26,7 +27,7 @@ const AnimatedPressable = ({children, handler, item, containerStyle}:IPros) => {
                 useNativeDriver:true
             })
         ]).start(()=>{
-            handler(item)
+            handler!(item)
         })
     }
 

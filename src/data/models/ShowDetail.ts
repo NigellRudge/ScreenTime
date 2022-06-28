@@ -1,6 +1,6 @@
 import { CreatedBy } from "./CreatedBy"
 import { Genre } from "./Genre"
-import { LastEpisodeToAir } from "./Episode"
+import { LastEpisodeToAir } from "./LastEpisodeToAir"
 import { Network } from "./Network"
 import { ProductionCompany } from "./ProductionCompany"
 import { ProductionCountry } from "./ProductionCountry"
@@ -8,6 +8,9 @@ import { SeasonShort } from "./Season"
 import { SpokenLanguage } from "./SpokenLanguage"
 import { Credits } from "./Credits"
 import { VideoResult } from "./Videos"
+import { Backdrop} from './Backdrop';
+import { Poster } from "./Poster"
+import { Logo } from "./Logo"
 
 
 export interface ShowdDetail {

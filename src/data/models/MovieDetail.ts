@@ -6,7 +6,7 @@ import { ProductionCompany } from "./ProductionCompany"
 import { ProductionCountry } from "./ProductionCountry"
 import { SpokenLanguage } from "./SpokenLanguage"
 
-export interface Root {
+export interface MovieDetail {
     adult: boolean
     backdrop_path: string
     belongs_to_collection: BelongsToCollection

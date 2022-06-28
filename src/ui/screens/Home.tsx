@@ -3,13 +3,16 @@ import React, {useEffect, useState} from 'react'
 import Theme from '../../utils/theme'
 import FastImage from 'react-native-fast-image'
 import { MediaList, Pill, RenderIf } from '../components'
-import { getMovieGenres, GetPopular} from '../../data/network/movies';
+import { getMovieGenres, GetNowPlaying, GetPopular} from '../../data/network/movies';
 import { MediaTypes } from '../../utils/config'
 import {Movie} from '../../data/models/Movie';
 import {Show} from '../../data/models/Show';
 import LoadingIndicator from '../components/LoadingIndicator'
 import { GetRandomItemFromArray } from '../../utils/functions'
 import FeaturedItem from '../components/FeaturedItem'
+import { GetPopularShows } from '../../data/network/shows'
+import { GetFeaturedItem, GetTrending } from '../../data/network/shared'
+import { TrendingItem } from '../../data/models/Trending'
 
 
 interface IProps {
@@ -17,19 +20,63 @@ interface IProps {
 }
 
 const Home = (props:IProps)=>{
-  const [featuredItem, setFeaturedItem] = useState<Movie|Show>({})
+  const [featuredItem, setFeaturedItem] = useState<TrendingItem|{}>({})
+  const [Trending, setTrending] = useState<TrendingItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [popularMovies, setPopularMovies] = useState<Movie[]>([])
-  const [popularShows, setPopularShows] = useState([])
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([])
+  const [popularShows, setPopularShows] = useState<Show[]>([])
+
+  const toItemDetailScreen = (itemId: number, itemType?:MediaTypes)=>{
+    if(itemType){
+      switch(itemType){
+        case MediaTypes.MOVIE:
+          console.log('hello movie')
+          break;
+
+        case MediaTypes.SHOW:
+          console.log('hello show')
+          break;
+          
+        default:
+          console.log('hello default')
+          break;
+    }
+  }
+}
+
 
   const loadData = async()=>{
     setLoading(true)
-    await GetPopular(1)
-            .then(data =>{
-               setPopularMovies(data)
-               setFeaturedItem(GetRandomItemFromArray(data))
-               setLoading(false)
-            })
+    await GetTrending()
+      .then((trendingData)=>{
+          let featuredData = GetRandomItemFromArray(trendingData) as TrendingItem
+          setFeaturedItem(featuredData)
+          setTrending(trendingData)
+      })
+    .then(()=>{
+        GetPopular(1)
+                .then(data =>{
+                    setPopularMovies(data)
+                })
+                .then(()=>{
+                    GetNowPlaying(1)
+                    .then(nowPlaying=>{
+                        setNowPlayingMovies(nowPlaying)            
+                    })
+                })
+                .then(()=>{
+                    GetPopularShows(1)
+                      .then((popShows)=>{
+                        setPopularShows(popShows)
+                      })
+                })
+      })
+      .then(()=>{
+            setTimeout(()=>{
+              setLoading(false)
+            },1200)
+      })
   }
 
   useEffect(()=>{
@@ -38,12 +85,15 @@ const Home = (props:IProps)=>{
   
   return (
     <View style={styles.screenContainer}>
-      <ScrollView>
+      <ScrollView bounces={false} alwaysBounceVertical={false}>
       <LoadingIndicator active={loading} />
       <RenderIf render={!loading}>
       <FeaturedItem item={featuredItem}  onPress={()=>{console.log('clicked')}} />
       <View style={styles.content}>
-        <MediaList showIcon={false} type={MediaTypes.MOVIE} items={popularMovies} label={"Popular this week"} onPress={()=>{console.log('hello')}} />
+        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={()=> console.log('hello')} />
+        <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={()=> console.log('hello')} />
+        <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen}  onMorePress={()=> console.log('hello')}/>
+        <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen}  onMorePress={()=> console.log('hello')}/>
       </View>
       </RenderIf>
       </ScrollView>
@@ -84,7 +134,6 @@ const styles = StyleSheet.create({
   },
   content:{
     flexDirection:'column',
-    paddingVertical:10,
     paddingHorizontal:10,
     width:'100%',
   }
