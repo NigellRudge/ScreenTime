@@ -4,14 +4,15 @@ import Theme from "../../utils/theme";
 import RenderIf from './RenderIf';
 
 type Props = {
-    active:boolean
+    active:boolean,
+    color?:string
 }
 
 const {colors,screenWidth, screenHeight} = Theme
-const LoadingIndicator = ({active}:Props) => {
+const LoadingIndicator = ({active,color=Theme.colors.primary}:Props) => {
     return (
         <RenderIf render={active}>
-            <ActivityIndicator animating={true} size='large' color={colors.light} style={styles.loadingContainer}/>
+            <ActivityIndicator animating={true} size='large' color={color} style={styles.loadingContainer}/>
         </RenderIf>
     );
 };

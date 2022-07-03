@@ -1,13 +1,13 @@
 import axios from "axios";
-import { BASE_URL, API_KEY } from "../../utils/config";
+import { BASE_URL, API_KEY, ImageSizes } from "../../utils/config";
 import { MovieResponse } from "../models/Movie";
-import {AddMediaUrlToPoster, AddMediaUrlToPosterMultiple, filterGenreArray} from '../../utils/functions';
+import {AddMediaUrlToBackdrop, AddMediaUrlToCastorCrew, AddMediaUrlToImageCollection, AddMediaUrlToPoster, AddMediaUrlToPosterMultiple, filterGenreArray, LimitArray} from '../../utils/functions';
 import {Movie} from '../models/Movie';
 import { GenreResponse,Genre } from "../models/Genre";
 import  {ParamType}  from './types'
 import { MovieDetail } from "../models/MovieDetail";
-
-
+import { Cast } from "../models/Credits";
+import { Crew } from "../models/Credits";
 
 export async function getMovieGenres(genreIds:number[]=[]):Promise<Genre[]>{
     let url =`${BASE_URL}movie/popular`;
@@ -71,12 +71,21 @@ export async function Search(query:string, page:number = 1){
 export async function GetDetails(movieId:number): Promise<MovieDetail|{}>{
     let url =`${BASE_URL}movie/${movieId}`;
     let params: ParamType = {
-        append_to_response: 'genres',
+        append_to_response: 'genres,credits,images',
         api_key: API_KEY
     }
     return axios.get<MovieDetail>(url,{params:params})
         .then(response => {
             response.data = AddMediaUrlToPoster(response.data) as MovieDetail;
+            response.data = AddMediaUrlToBackdrop(response.data, ImageSizes.ORIGINAL) as MovieDetail
+            response.data.credits.cast = LimitArray(response.data.credits.cast,10) as Cast[];
+            response.data.credits.crew = LimitArray(response.data.credits.crew,5) as Crew[];
+            response.data.genres = LimitArray(response.data.genres,5) as Genre[];
+            response.data.images.posters = AddMediaUrlToImageCollection(LimitArray(response.data.images.posters))
+            response.data.images.backdrops = AddMediaUrlToImageCollection(LimitArray(response.data.images.backdrops))
+            console.log(response.data.images.posters);
+            
+            response.data.credits = AddMediaUrlToCastorCrew(response.data.credits);
             return response.data;
         })
         .catch(error => {
@@ -85,6 +94,20 @@ export async function GetDetails(movieId:number): Promise<MovieDetail|{}>{
         })
 }
 
-export async function GetSimilar(movieId:number){
-
+export async function GetSimilar(movieId:number, page:number = 1):Promise<Movie[]>{
+    let url =`${BASE_URL}movie/${movieId}/similar`;
+    let params: ParamType = {
+        page:page,
+        append_to_response: 'genres',
+        api_key: API_KEY
+    }
+    return axios.get<MovieResponse>(url,{params:params})
+        .then(response => {
+            response.data.results = AddMediaUrlToPosterMultiple(response.data.results) as Movie[];
+            return response.data.results;
+        })
+        .catch(error => {
+            console.log(error)
+            return []
+        })
 }

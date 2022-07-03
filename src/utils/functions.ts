@@ -1,12 +1,13 @@
 import { Movie } from "../data/models/Movie";
-import { Episode } from "../data/models/Season";
+import { Crew, Episode } from "../data/models/Season";
 import { Show } from "../data/models/Show";
-import { ImageSizes, MediaTypes, MEDIA_URL } from "./config";
+import { ImageSizes, MediaTypes, MEDIA_URL, months } from "./config";
 import { Backdrop } from "../data/models/Backdrop";
 import { Poster } from "../data/models/Poster";
 import { Genre } from "../data/models/Genre";
 import { TrendingItem } from "../data/models/Trending";
 import { MovieDetail } from "../data/models/MovieDetail";
+import { Cast, Credits } from "../data/models/Credits";
 
 export function GetMediaUrl (input:string, size: ImageSizes = ImageSizes.NORMAL):string{
     return `${MEDIA_URL}${size}/${input}`
@@ -43,8 +44,8 @@ export function AddMediaUrlToPosterMultiple(input:Movie[]|Show[]):Show[]|Movie[]
     return input;
 }
 
-export function AddMediaUrlToBackdrop(input:Movie|Show|MovieDetail):Movie|Show|MovieDetail{
-    input.backdrop_path = GetMediaUrl(input.backdrop_path!)
+export function AddMediaUrlToBackdrop(input:Movie|Show|MovieDetail, size:ImageSizes = ImageSizes.NORMAL):Movie|Show|MovieDetail{
+    input.backdrop_path = GetMediaUrl(input.backdrop_path!,size)
     return input;
 }
 
@@ -101,4 +102,55 @@ export function AddPosterToTrendingMultiple(inputArray: TrendingItem[]):Trending
         item.poster_path = GetMediaUrl(item.poster_path)
     }
     return inputArray;
+}
+
+export function CreateGenreString(input:Genre[]):string{
+    let output = '';
+    if(input == undefined)
+        return output;
+    if(input.length == 0)
+        return output;
+    for(let genre of input){
+        if(output == ''){
+            output = genre.name
+            continue;
+        }
+        output += `, ${genre.name}`;
+    }    
+    return output
+}
+
+export function AddMediaUrlToCastorCrew(input: Credits):Credits{
+    if(input.cast.length != 0){
+        for(let item of input.cast){
+            item.profile_path = GetMediaUrl(item.profile_path!,ImageSizes.NORMAL)
+        }
+    }
+    if(input.crew.length != 0){
+        for(let item of input.crew){
+            item.profile_path = GetMediaUrl(item.profile_path!,ImageSizes.NORMAL)
+        }
+    }
+    return input;
+}
+
+export function LimitArray(inputArray:any[], count:number = 5):any[]{
+    return inputArray.slice(0,count);
+}
+
+export function formatRuntime(input:number):string{
+    let output = '';
+    if(input == undefined)
+        return output;
+    let hours = Math.floor(input / 60) > 10 ? Math.floor(input / 60).toString() : '0' + Math.floor(input / 60).toString();
+    let minutes = (input % 60)  > 10 ? (input % 60).toString() : '0' + (input % 60).toString();
+    output = `${hours}h${minutes}m`;
+
+    return output
+}
+
+export function formatReleaseDate(input:string):string{
+    let date = new Date(input);
+    let formatedDate = `${months[date.getMonth()]} ${date.getFullYear()}`;
+    return formatedDate;
 }

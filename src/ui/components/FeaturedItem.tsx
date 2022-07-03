@@ -12,6 +12,8 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import IconButton from './IconButton';
 import RoundedButton from './RoundedButton';
 import { TrendingItem } from '../../data/models/Trending';
+import WatchNowButton from './WatchNowButton';
+import AddToPlaylistButton from './AddToPlaylistButton';
 
 const playButtonIcon = <Ionicon name='play-circle' size={18} color={Theme.colors.light} />;
 const watchLaterIcon = <Ionicon name='ios-add' size={18} color={Theme.colors.light} />
@@ -57,8 +59,8 @@ const FeaturedItem = ({item, onPress, type=MediaTypes.MOVIE}: IProps) => {
             <RatingComponent rating={item.vote_average} size={12} />
             <Text style={styles.genreText}> Action, Science-fiction, Drama</Text>
             <View style={styles.actionContainer}>
-              <RoundedButton textStyle={actionButtonStyle} style={{paddingHorizontal:10}} text="Watch now" handler={()=>console.log('hello there')} icon={playButtonIcon} />
-              <RoundedButton style={transParentButtonStyle} color={Theme.colors.ratingColorGray} textStyle={actionButtonStyle} text="Add to playlist" handler={()=>console.log('hello there')} icon={watchLaterIcon} />
+              <WatchNowButton />
+              <AddToPlaylistButton />   
             </View>
           </View>
         </View>

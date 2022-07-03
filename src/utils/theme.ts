@@ -19,7 +19,8 @@ const Theme = {
         tabBackgroundColor: '#0d0d22',
         backgroundColor2: '#282f53',
         ratingColor: '#fcb100',
-        ratingColorGray:'gray'
+        ratingColorGray:'gray',
+        backgroundColorTransparent: 'rgba(17, 17, 44, 0.7)'
     },
     textSize: {
         h1: 30,

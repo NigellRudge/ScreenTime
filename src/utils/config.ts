@@ -14,7 +14,30 @@ export enum MediaTypes {
     TRENDING = 'trending'
 }
 
+export enum CreditTypes {
+    CAST = 'cast',
+    CREW = 'crew'
+}
 
+export enum IMAGE_TYPES {
+    POSTER = 1,
+    BACKDROP = 2
+}
+
+export const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'Juli',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
 
 export const API_KEY = 'a28d205a378cece6baa18ba20119765b'
 export const BASE_URL = 'https://api.themoviedb.org/3/'

@@ -37,7 +37,7 @@ const MediaList = ({items, onItemPress, label,onMorePress, type=MediaTypes.MOVIE
                 data={items}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item)=>item.id.toString()}
+                keyExtractor={(item, index)=>(item.id + index).toString()}
                 horizontal={true}
                 renderItem={ ({item}) =>{
                     return <Item item={item} type={type} onPress={onItemPress} />
@@ -57,7 +57,7 @@ const Item = ({item, onPress, type}:ItemProps)=>{
     return(
         <View style={styles.container}>
             <View style={styles.ratingContainer}>
-                <Text style={styles.rating}>{vote_average}</Text>
+                <Text style={styles.rating}>{vote_average.toFixed(1)}</Text>
             </View>
             <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id,type)}>
                 <FastImage style={styles.image} source={{uri:poster_path}}/>

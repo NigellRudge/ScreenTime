@@ -2,12 +2,13 @@ import React from 'react';
 import {Text,View,StyleSheet, StatusBar, SafeAreaView} from 'react-native';
 import Theme from './utils/theme';
 import Home from './ui/screens/Home';
+import MovieDetailScreen from './ui/screens/MovieDetailScreen';
 
 const App = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'light-content'} translucent={true} backgroundColor={'transparent'}/>
-      <Home />
+      <MovieDetailScreen />
     </View>
   );
 };

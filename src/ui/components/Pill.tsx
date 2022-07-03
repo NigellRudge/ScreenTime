@@ -4,14 +4,15 @@ import Theme, {fontWeightType} from '../../utils/theme';
 
 type Props = {
     text:string,
-    containerStyle?: StyleProp<ViewStyle>,
+    padding?:number,
+    radius?: number,
     textStyle?:StyleProp<TextStyle>,
     color:string
 }
 
-const Pill = ({text,containerStyle, textStyle={},color=Theme.colors.primary}:Props) => {
+const Pill = ({text,padding=5,radius = 30, textStyle={},color=Theme.colors.primary}:Props) => {
     return (
-        <View style={[styles.container, containerStyle, {backgroundColor: color}]}>
+        <View style={[styles.container, {borderRadius:radius,padding:padding, backgroundColor: color}]}>
             <Text style={[styles.text,textStyle]}>{text}</Text>
         </View>
     );
@@ -21,17 +22,14 @@ export default Pill;
 
 const styles = StyleSheet.create({
     container: {
-        height:30,
-        paddingHorizontal:15,
         marginHorizontal:3,
-        borderRadius:40,
         overflow:'hidden',
         justifyContent:'center', alignItems:'center'
     },
     text:{
         color:Theme.colors.light,
-        fontSize:Theme.textSize.h5 * 0.8,
-        fontWeight:'500'
+        fontSize:Theme.textSize.h5 * 0.7,
+        fontWeight:'600'
     },
 
 });
