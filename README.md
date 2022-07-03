@@ -10,9 +10,18 @@ The tools, pakages used in this project are:
 4. React Native Vector Icons
 5. React Native Linear Gradient
 6. Axios
+7. TheMovieDB API
 
-
-
+## Todo
+- [x] Home Page
+- [x] Movie Detail Page
+- [ ] Show Detail Page
+- [ ] Search Page
+- [ ] Explore Page
+- [ ] Add Navigation
+- [ ] Add State management
+- [ ] Create custom loading animation
+- [ ] Add Lottie Animation
 
 | HomePage  |MovieDetailPage|
 | ------------- | ------------- |
