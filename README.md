@@ -11,3 +11,6 @@ The tools, pakages used in this project are:
 5. React Native Linear Gradient
 6. Axios
 
+![HomePage](https://github.com/NigellRudge/ScreenTime/blob/main/src/assets/Simulator%20Screen%20Recording%20-%20iPhone%2013%20-%202022-07-03%20at%2013.55.39.gif)
+
+![MovieDetailPage](https://github.com/NigellRudge/ScreenTime/blob/main/src/assets/Simulator%20Screen%20Recording%20-%20iPhone%2013%20-%202022-07-03%20at%2013.57.12.gif)
