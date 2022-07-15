@@ -2,8 +2,7 @@ export enum HomeRoutes {
     Tabs = "Tabs",
     MovieDetail = "MovieDetail",
     ShowDetail = "ShowDetail",
-    BrowseMovies = "BrowseMovies",
-    BrowseShows = "BrowseShows"
+    Browse = "Browse"
 }
 
 export enum TabRoutes {

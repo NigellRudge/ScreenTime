@@ -6,11 +6,13 @@ import Home from '../screens/Home';
 import TabStack, { TabRoutesParamList } from './TabStack';
 import MovieDetailScreen from '../screens/MovieDetailScreen';
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { MediaTypes } from '../../utils/config';
 
 export type BaseStackParamList = {
     [HomeRoutes.Tabs]:NavigatorScreenParams<TabRoutesParamList>,
     [HomeRoutes.MovieDetail]:{movieId:number}
     [HomeRoutes.ShowDetail]:{showId:number}
+    [HomeRoutes.Browse]:{mediaType:MediaTypes,genreId?:number,}
 }
 const Stack = createNativeStackNavigator<BaseStackParamList>()
 
