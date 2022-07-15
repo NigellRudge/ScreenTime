@@ -8,6 +8,7 @@ import { Genre } from "../data/models/Genre";
 import { TrendingItem } from "../data/models/Trending";
 import { MovieDetail } from "../data/models/MovieDetail";
 import { Cast, Credits } from "../data/models/Credits";
+import Theme from "./theme";
 
 export function GetMediaUrl (input:string, size: ImageSizes = ImageSizes.NORMAL):string{
     return `${MEDIA_URL}${size}/${input}`
@@ -153,4 +154,13 @@ export function formatReleaseDate(input:string):string{
     let date = new Date(input);
     let formatedDate = `${months[date.getMonth()]} ${date.getFullYear()}`;
     return formatedDate;
+}
+
+export function getCorrectTextSize(input:string):number{
+    let size = Theme.textSize.h1;
+    if(input.length > 20)
+        size = size * 0.8
+    if(input.length > 15)
+        size = size * 0.9
+    return size;
 }

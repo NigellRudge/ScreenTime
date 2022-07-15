@@ -3,13 +3,17 @@ import {Text,View,StyleSheet, StatusBar, SafeAreaView} from 'react-native';
 import Theme from './utils/theme';
 import Home from './ui/screens/Home';
 import MovieDetailScreen from './ui/screens/MovieDetailScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import BaseStack from './ui/stacks/BaseStack';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={'light-content'} translucent={true} backgroundColor={'transparent'}/>
-      <MovieDetailScreen />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <StatusBar barStyle={'light-content'} translucent={true} backgroundColor={'transparent'}/>
+          <BaseStack />
+      </View>
+    </NavigationContainer>
   );
 };
 

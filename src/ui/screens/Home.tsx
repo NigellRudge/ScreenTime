@@ -13,13 +13,20 @@ import FeaturedItem from '../components/FeaturedItem'
 import { GetPopularShows } from '../../data/network/shows'
 import { GetFeaturedItem, GetTrending } from '../../data/network/shared'
 import { TrendingItem } from '../../data/models/Trending'
+import { CompositeScreenProps } from '@react-navigation/native'
+import { TabRoutesParamList } from '../stacks/TabStack'
+import { HomeRoutes, TabRoutes } from '../../utils/routes'
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import { BaseStackParamList } from '../stacks/BaseStack'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 
-interface IProps {
+type Props = CompositeScreenProps<
+  BottomTabScreenProps<TabRoutesParamList, TabRoutes.Trending>,
+  NativeStackScreenProps<BaseStackParamList>
+>;
 
-}
-
-const Home = (props:IProps)=>{
+const Home = ({navigation}:Props)=>{
   const [featuredItem, setFeaturedItem] = useState<TrendingItem|{}>({})
   const [Trending, setTrending] = useState<TrendingItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -31,7 +38,7 @@ const Home = (props:IProps)=>{
     if(itemType){
       switch(itemType){
         case MediaTypes.MOVIE:
-          console.log('hello movie')
+          navigation.push(HomeRoutes.MovieDetail,{movieId:itemId})
           break;
 
         case MediaTypes.SHOW:
@@ -90,10 +97,10 @@ const Home = (props:IProps)=>{
       <RenderIf render={!loading}>
       <FeaturedItem item={featuredItem}  onPress={()=>{console.log('clicked')}} />
       <View style={styles.content}>
-        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={()=> console.log('hello')} />
-        <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={()=> console.log('hello')} />
-        <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen}  onMorePress={()=> console.log('hello')}/>
-        <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen}  onMorePress={()=> console.log('hello')}/>
+        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
+        <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
+        <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
+        <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
       </View>
       </RenderIf>
       </ScrollView>
@@ -105,6 +112,7 @@ export default Home;
 const styles = StyleSheet.create({
   screenContainer:{
     flex:1,
+    backgroundColor:Theme.colors.backgroundColor
   },
   featuredItemContainer:{
     zIndex:10,

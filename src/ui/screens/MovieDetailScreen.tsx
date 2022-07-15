@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AnimatedPressable from '../components/AnimatedPressable';
 import WatchNowButton from '../components/WatchNowButton';
 import AddToPlaylistButton from '../components/AddToPlaylistButton';
-import { CreateGenreString, formatReleaseDate, formatRuntime } from '../../utils/functions';
+import { CreateGenreString, formatReleaseDate, formatRuntime, getCorrectTextSize } from '../../utils/functions';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { MediaList, Pill, RenderIf } from '../components';
 import CreditList from '../components/CreditList';
@@ -18,23 +18,24 @@ import * as Progress from 'react-native-progress';
 import IconTextCombo from '../components/IconTextCombo';
 import ImageList from '../components/ImageList';
 import {IMAGE_TYPES} from '../../utils/config';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BaseStackParamList } from '../stacks/BaseStack';
+import { HomeRoutes } from '../../utils/routes';
+import { Show } from '../../data/models/Show';
 
 
-
-interface IProps {
-
-}
+type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.MovieDetail>;
 
 const MovieID = 299534;
 
-const MovieDetailScreen = ({}:IProps) => {
+const MovieDetailScreen = ({navigation,route}:IProps) => {
   const [movieDetails, setMovieDetails] = useState<MovieDetail>({})
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   const getMovieDetails = async()=>{
     setLoading(true)
-      return await GetDetails(MovieID)
+      return await GetDetails(route.params.movieId)
         .then((detailsData)=>{
           setMovieDetails(detailsData)
         })
@@ -57,15 +58,20 @@ const MovieDetailScreen = ({}:IProps) => {
         })
   },[])
 
-  console.log(`loading: ${loading}`);
-  console.log(`MovieDetails: ${movieDetails}`);
+  const goBack = ()=>{
+    navigation.goBack();
+  }
+  
+
   if(loading){
-    return <LoadingIndicator active={true} />
+    return <View style={styles.screenContainer}>
+            <LoadingIndicator active={true} />
+        </View>
   }
   else{
   return (
     <View style={styles.screenContainer}>
-      <AnimatedPressable containerStyle={styles.backButtonContainer} handler={()=>console.log('back pressed')} >
+      <AnimatedPressable containerStyle={styles.backButtonContainer} handler={goBack} >
         <Ionicons name='arrow-back' color={Theme.colors.light} size={24} />
       </AnimatedPressable>
       <ScrollView bounces={false} alwaysBounceVertical={false}>
@@ -73,7 +79,7 @@ const MovieDetailScreen = ({}:IProps) => {
           <FastImage style={styles.headerImage} source={{uri:movieDetails.backdrop_path}} />
           <FastImage style={styles.headerPoster} source={{uri:movieDetails.poster_path}} />
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{movieDetails.title}</Text>
+            <Text style={[styles.title, {fontSize: getCorrectTextSize(movieDetails.title)}]}>{movieDetails.title}</Text>
             <View style={{flexDirection:'row', paddingTop:5}}>
               {movieDetails.genres.map((item, index)=>{
                  return <Pill text={item.name} color={Theme.colors.primary} key={(item.id+index).toString()}/>
@@ -117,7 +123,8 @@ export default MovieDetailScreen;
 const styles = StyleSheet.create({
     screenContainer:{
       flex:1,
-      paddingBottom:40
+      paddingBottom:40,
+      backgroundColor:Theme.colors.backgroundColor
     },
     backButtonContainer:{
       position:'absolute',
@@ -143,7 +150,7 @@ const styles = StyleSheet.create({
     },
     headerImageContainer:{
       width:'100%',
-      height:380,
+      height:400,
     },
     headerImageCover:{
 

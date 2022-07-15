@@ -23,8 +23,8 @@ const Theme = {
         backgroundColorTransparent: 'rgba(17, 17, 44, 0.7)'
     },
     textSize: {
-        h1: 30,
-        h2: 25,
+        h1: 32,
+        h2: 26,
         h3: 20,
         h4: 16,
         h5: 13,

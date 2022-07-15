@@ -83,6 +83,7 @@ export async function GetDetails(movieId:number): Promise<MovieDetail|{}>{
             response.data.genres = LimitArray(response.data.genres,5) as Genre[];
             response.data.images.posters = AddMediaUrlToImageCollection(LimitArray(response.data.images.posters))
             response.data.images.backdrops = AddMediaUrlToImageCollection(LimitArray(response.data.images.backdrops))
+            response.data.genres = LimitArray(response.data.genres,3)
             console.log(response.data.images.posters);
             
             response.data.credits = AddMediaUrlToCastorCrew(response.data.credits);

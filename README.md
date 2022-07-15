@@ -18,11 +18,12 @@ The tools, pakages used in this project are:
 - [ ] Show Detail Page
 - [ ] Search Page
 - [ ] Explore Page
-- [ ] Add Navigation (React Navigation)
+- [x] Add Navigation (React Navigation)
 - [ ] Add State management
 - [ ] Create custom loading animation
 - [ ] Add Lottie Animation
 - [ ] Add Layout Animations (Navbar, Layout animations)
+- [ ] Use UI Library (NativeBase?, UI Kitten?)
 
 | HomePage  |MovieDetailPage|
 | ------------- | ------------- |

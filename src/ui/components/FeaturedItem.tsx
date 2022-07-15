@@ -46,10 +46,10 @@ const FeaturedItem = ({item, onPress, type=MediaTypes.MOVIE}: IProps) => {
                 <Text style={styles.headerText}>{headerText}</Text>
                 <Text style={styles.subHeaderText}>{otherInfo}</Text>
             </View>
-            <View style={{flexDirection:'row', flexGrow:1 , justifyContent:'space-between', paddingLeft:20}}>
+            {/* <View style={{flexDirection:'row', flexGrow:1 , justifyContent:'space-between', paddingLeft:20}}>
               <IconButton iconName='search' color={Theme.colors.light} size={30} onPress={()=>console.log('hello there')} />
               <IconButton iconName='notifications-outline' color={Theme.colors.light} size={30} onPress={()=>console.log('hello there')} />
-            </View>
+            </View> */}
         </View>
         <FastImage style={styles.featuredItemImage} source={{ uri: item.poster_path} }
         resizeMode={FastImage.resizeMode.cover} />
