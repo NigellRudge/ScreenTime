@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity,ListRenderItem } from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity,ListRenderItem, StyleProp, ViewStyle } from 'react-native'
 import React from 'react'
 import Theme from '../../utils/theme'
 import { Show } from '../../data/models/Show'
@@ -14,13 +14,14 @@ interface ListProps {
     label:string,
     items: Movie[]|Show[]|TrendingItem[],
     type: MediaTypes,
-    onMorePress?: (type:any)=>void
+    onMorePress?: (type:MediaTypes)=>void
 }
 
 interface ItemProps {
     item: Movie | Show |TrendingItem
     type:MediaTypes
     onPress: (itemId:number, type?:MediaTypes)=>void
+    containerStyle?:StyleProp<ViewStyle>
 }
 
 const MediaList = ({items, onItemPress, label,onMorePress, type=MediaTypes.MOVIE}:ListProps)=> {
@@ -29,7 +30,7 @@ const MediaList = ({items, onItemPress, label,onMorePress, type=MediaTypes.MOVIE
     <View style={styles.listContainer}>
             <View style={styles.labelContainer}>
                 <Text style={styles.label}>{label}</Text>
-                <AnimatedPressable containerStyle={{justifyContent:'center', alignContent:'center'}} handler={(onMorePress!)} >
+                <AnimatedPressable containerStyle={{justifyContent:'center', alignContent:'center'}} handler={()=>onMorePress!(type)} >
                     <Text style={{fontSize:Theme.textSize.h5, color:Theme.colors.light, fontWeight:'700'}}>See all</Text>
                 </AnimatedPressable>
             </View>
@@ -49,7 +50,7 @@ const MediaList = ({items, onItemPress, label,onMorePress, type=MediaTypes.MOVIE
 export default MediaList;
 
 
-const Item = ({item, onPress, type}:ItemProps)=>{
+export const Item = ({item, onPress, type, containerStyle}:ItemProps)=>{
     const {vote_average, poster_path} = item
     if(type == MediaTypes.TRENDING){
         item = item as TrendingItem

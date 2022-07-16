@@ -8,6 +8,7 @@ import  {ParamType}  from './types'
 import { MovieDetail } from "../models/MovieDetail";
 import { Cast } from "../models/Credits";
 import { Crew } from "../models/Credits";
+import { prePareContent } from "../../utils/functions";
 
 export async function getMovieGenres(genreIds:number[]=[]):Promise<Genre[]>{
     let url =`${BASE_URL}movie/popular`;
@@ -109,6 +110,22 @@ export async function GetSimilar(movieId:number, page:number = 1):Promise<Movie[
         })
         .catch(error => {
             console.log(error)
+            return []
+        })
+}
+
+export async function BrowseMovieByGenre(genreId:number, page:number = 1):Promise<Movie[]>{
+    let url = `${BASE_URL}discover/movie`
+    let params: ParamType = {
+        api_key: API_KEY,
+        with_genres:[genreId],
+        append_to_response:'genres, images, credits'
+    }
+    return await axios.get(url, {params:params})
+        .then((response)=>{
+            return prePareContent(response.data.results) as Movie[]
+        })
+        .catch((error)=>{
             return []
         })
 }

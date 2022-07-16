@@ -164,3 +164,8 @@ export function getCorrectTextSize(input:string):number{
         size = size * 0.9
     return size;
 }
+
+export function prePareContent(input: Movie[]|Show[]):Movie[]|Show[]{
+    input = AddMediaUrlToPosterMultiple(input);
+    return input;
+}

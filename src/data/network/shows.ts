@@ -6,7 +6,7 @@ import { Show } from '../models/Show';
 import { Season } from '../models/Season'
 import { ShowdDetail } from "../models/ShowDetail";
 import { AddMediaUrlToPosterMultiple } from "../../utils/functions";
-
+import { prePareContent } from "../../utils/functions";
 
 export async function GetPopularShows(page:number = 1):Promise<Show[]> {
     let url = `${BASE_URL}tv/top_rated`
@@ -110,4 +110,20 @@ export async function GetSeasonDetails(showId: number, seasonNumber: number): Pr
                     console.log(error)
                     return {}
                 })
+}
+
+export async function BrowseShowByGenre(genreId:number, page:number = 1):Promise<Show[]>{
+    let url = `${BASE_URL}discover/tv`
+    let params: ParamType = {
+        api_key: API_KEY,
+        with_genres:[genreId],
+        append_to_response:'genres, images, credits'
+    }
+    return await axios.get(url, {params:params})
+        .then((response)=>{
+            return prePareContent(response.data.results) as Show[]
+        })
+        .catch((error)=>{
+            return []
+        })
 }

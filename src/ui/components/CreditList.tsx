@@ -26,7 +26,7 @@ const CreditList = ({items,type=CreditTypes.CAST, text="test"}:IProps) => {
                 data={items}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item)=>item.id.toString()}
+                keyExtractor={(item, index)=>(item.id + index).toString()}
                 horizontal={true}
                 renderItem={ ({item}) =>{
                     return <Item item={item} key={item.id.toString()} type={type} />

@@ -1,8 +1,14 @@
 import axios from "axios";
 import { API_KEY, BASE_URL, MediaTypes } from "../../utils/config";
-import { AddPosterToTrending, AddPosterToTrendingMultiple, GetRandomItemFromArray } from "../../utils/functions";
+import { AddPosterToTrending, AddPosterToTrendingMultiple, GetRandomItemFromArray, prePareContent } from "../../utils/functions";
+import { MovieResponse } from "../models/Movie";
 import { TrendingItem, TrendingResult } from "../models/Trending";
 import { ParamType } from "./types";
+import { Movie } from "../models/Movie";
+import { Show } from "../models/Show";
+import { BrowseResponse } from "../models/BrowseResponse";
+import { BrowseMovieByGenre } from './movies';
+import { BrowseShowByGenre } from "./shows";
 
 export async function GetFeaturedItem(): Promise<TrendingItem | {}>{
     let itemTypes = [MediaTypes.MOVIE, MediaTypes.SHOW];
@@ -36,3 +42,32 @@ export async function GetTrending(page:number = 1):Promise<TrendingItem[]|[]>{
             return [];
         })
 }
+
+export async function Browse(type:MediaTypes,page:number = 1, genreId?:number):Promise<Movie[]|Show[]|TrendingItem[]>{
+    switch(type){
+        case MediaTypes.MOVIE:{
+            if(genreId != null){
+                return BrowseMovieByGenre(genreId!,page)
+            }
+            else{
+                return []
+            }
+        }
+        case MediaTypes.SHOW:{
+            if(genreId !== null){
+                return BrowseShowByGenre(genreId!,page)
+            }
+            else{
+                return []
+            }
+        }
+        case MediaTypes.TRENDING:{
+            return GetTrending(page)
+        }
+        default:
+            return [];
+    }
+}
+
+
+

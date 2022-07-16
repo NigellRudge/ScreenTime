@@ -24,6 +24,7 @@ The tools, pakages used in this project are:
 - [ ] Add Lottie Animation
 - [ ] Add Layout Animations (Navbar, Layout animations)
 - [ ] Use UI Library (NativeBase?, UI Kitten?)
+- [ ] Dark and Light Mode
 
 | HomePage  |MovieDetailPage|
 | ------------- | ------------- |

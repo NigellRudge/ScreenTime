@@ -10,3 +10,7 @@ export enum TabRoutes {
     Search = "Search",
     MyPlaylist = "MyPlaylist"
 }
+export enum RootRoutes {
+    Tabs = "Tabs",
+    Base = "Base"
+}

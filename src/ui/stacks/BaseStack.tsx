@@ -7,6 +7,7 @@ import TabStack, { TabRoutesParamList } from './TabStack';
 import MovieDetailScreen from '../screens/MovieDetailScreen';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { MediaTypes } from '../../utils/config';
+import BrowseScreen from '../screens/BrowseScreen';
 
 export type BaseStackParamList = {
     [HomeRoutes.Tabs]:NavigatorScreenParams<TabRoutesParamList>,
@@ -25,6 +26,7 @@ const BaseStack = () => {
     }}>
         <Screen name={HomeRoutes.Tabs} component={TabStack} />
         <Screen name={HomeRoutes.MovieDetail} component={MovieDetailScreen} initialParams={{movieId:299534}} />
+        <Screen name={HomeRoutes.Browse} component={BrowseScreen} initialParams={{mediaType:MediaTypes.TRENDING}} />
     </Navigator>
   )
 }

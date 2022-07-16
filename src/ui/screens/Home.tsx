@@ -35,23 +35,22 @@ const Home = ({navigation}:Props)=>{
   const [popularShows, setPopularShows] = useState<Show[]>([])
 
   const toItemDetailScreen = (itemId: number, itemType?:MediaTypes)=>{
-    if(itemType){
-      switch(itemType){
-        case MediaTypes.MOVIE:
-          navigation.push(HomeRoutes.MovieDetail,{movieId:itemId})
-          break;
+      if(itemType){
+        switch(itemType){
+          case MediaTypes.MOVIE:
+            navigation.push(HomeRoutes.MovieDetail,{movieId:itemId})
+            break;
 
-        case MediaTypes.SHOW:
-          console.log('hello show')
-          break;
-          
-        default:
-          console.log('hello default')
-          break;
+          case MediaTypes.SHOW:
+            console.log('hello show')
+            break;
+            
+          default:
+            console.log('hello default')
+            break;
+      }
     }
   }
-}
-
 
   const loadData = async()=>{
     setLoading(true)
@@ -86,6 +85,10 @@ const Home = ({navigation}:Props)=>{
       })
   }
 
+  const browseContent = (type:MediaTypes,genre?:number)=>{
+      navigation.push(HomeRoutes.Browse,{mediaType:type,genreId:genre})
+  }
+
   useEffect(()=>{
       loadData();
   },[])
@@ -97,10 +100,10 @@ const Home = ({navigation}:Props)=>{
       <RenderIf render={!loading}>
       <FeaturedItem item={featuredItem}  onPress={()=>{console.log('clicked')}} />
       <View style={styles.content}>
-        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
-        <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
-        <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
-        <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen} onMorePress={toItemDetailScreen} />
+        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
+        <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
+        <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
+        <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
       </View>
       </RenderIf>
       </ScrollView>

@@ -5,8 +5,6 @@ import { Movie } from '../../data/models/Movie'
 import { GetDetails, GetSimilar } from '../../data/network/movies';
 import FastImage from 'react-native-fast-image';
 import Theme from '../../utils/theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AnimatedPressable from '../components/AnimatedPressable';
 import WatchNowButton from '../components/WatchNowButton';
 import AddToPlaylistButton from '../components/AddToPlaylistButton';
 import { CreateGenreString, formatReleaseDate, formatRuntime, getCorrectTextSize } from '../../utils/functions';
@@ -22,6 +20,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BaseStackParamList } from '../stacks/BaseStack';
 import { HomeRoutes } from '../../utils/routes';
 import { Show } from '../../data/models/Show';
+import BackButton from '../components/BackButton';
 
 
 type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.MovieDetail>;
@@ -71,9 +70,7 @@ const MovieDetailScreen = ({navigation,route}:IProps) => {
   else{
   return (
     <View style={styles.screenContainer}>
-      <AnimatedPressable containerStyle={styles.backButtonContainer} handler={goBack} >
-        <Ionicons name='arrow-back' color={Theme.colors.light} size={24} />
-      </AnimatedPressable>
+      <BackButton onPress={goBack}/>
       <ScrollView bounces={false} alwaysBounceVertical={false}>
         <View style={styles.headerImageContainer}>
           <FastImage style={styles.headerImage} source={{uri:movieDetails.backdrop_path}} />
