@@ -15,9 +15,9 @@ The tools, pakages used in this project are:
 ## Todo
 - [x] Home Page
 - [x] Movie Detail Page
-- [ ] Show Detail Page
+- [x] Show Detail Page
 - [ ] Search Page
-- [ ] Explore Page
+- [x] Explore/Browse Page
 - [x] Add Navigation (React Navigation)
 - [ ] Add State management
 - [ ] Create custom loading animation
@@ -25,6 +25,8 @@ The tools, pakages used in this project are:
 - [ ] Add Layout Animations (Navbar, Layout animations)
 - [ ] Use UI Library (NativeBase?, UI Kitten?)
 - [ ] Dark and Light Mode
+- [ ] Store sensitive information in .env file
+- [ ] Offline support/ Cache
 
 | HomePage  |MovieDetailPage|
 | ------------- | ------------- |
