@@ -8,12 +8,13 @@ import MovieDetailScreen from '../screens/MovieDetailScreen';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { MediaTypes } from '../../utils/config';
 import BrowseScreen from '../screens/BrowseScreen';
+import ShowDetailScreen from '../screens/ShowDetailScreen';
 
 export type BaseStackParamList = {
     [HomeRoutes.Tabs]:NavigatorScreenParams<TabRoutesParamList>,
     [HomeRoutes.MovieDetail]:{movieId:number}
     [HomeRoutes.ShowDetail]:{showId:number}
-    [HomeRoutes.Browse]:{mediaType:MediaTypes,genreId?:number,}
+    [HomeRoutes.Browse]:{mediaType:MediaTypes,genreId?:number, title?: String}
 }
 const Stack = createNativeStackNavigator<BaseStackParamList>()
 
@@ -26,7 +27,8 @@ const BaseStack = () => {
     }}>
         <Screen name={HomeRoutes.Tabs} component={TabStack} />
         <Screen name={HomeRoutes.MovieDetail} component={MovieDetailScreen} initialParams={{movieId:299534}} />
-        <Screen name={HomeRoutes.Browse} component={BrowseScreen} initialParams={{mediaType:MediaTypes.TRENDING}} />
+        <Screen name={HomeRoutes.ShowDetail} component={ShowDetailScreen} initialParams={{showId:299534}} />
+        <Screen name={HomeRoutes.Browse} component={BrowseScreen} initialParams={{mediaType:MediaTypes.TRENDING, title:"Trending"}} />
     </Navigator>
   )
 }
