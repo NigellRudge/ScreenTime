@@ -7,7 +7,7 @@ import Theme from '../../utils/theme';
 interface Props {
     onPress: ()=>void,
     iconColor?: string,
-    iconSize?:number
+    iconSize?:number,
 }
 
 const BackButton = ({onPress, iconColor=Theme.colors.light, iconSize=24}:Props) => {

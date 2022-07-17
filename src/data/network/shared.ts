@@ -31,7 +31,8 @@ export async function GetFeaturedItem(): Promise<TrendingItem | {}>{
 export async function GetTrending(page:number = 1):Promise<TrendingItem[]|[]>{
     let url = `${BASE_URL}trending/all/week`;
     let params: ParamType ={
-        api_key: API_KEY
+        api_key: API_KEY,
+        page:page
     }
     return await axios.get<TrendingResult>(url,{params:params})
         .then((response)=>{

@@ -21,6 +21,7 @@ import { BaseStackParamList } from '../stacks/BaseStack';
 import { HomeRoutes } from '../../utils/routes';
 import { Show } from '../../data/models/Show';
 import BackButton from '../components/BackButton';
+import Screen from '../components/Screen';
 
 
 type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.MovieDetail>;
@@ -69,7 +70,7 @@ const MovieDetailScreen = ({navigation,route}:IProps) => {
   }
   else{
   return (
-    <View style={styles.screenContainer}>
+    <Screen style={styles.screenContainer}>
       <BackButton onPress={goBack}/>
       <ScrollView bounces={false} alwaysBounceVertical={false}>
         <View style={styles.headerImageContainer}>
@@ -110,7 +111,7 @@ const MovieDetailScreen = ({navigation,route}:IProps) => {
           </View>
         </View>
         </ScrollView>
-    </View>
+    </Screen>
   )
   }
 }
