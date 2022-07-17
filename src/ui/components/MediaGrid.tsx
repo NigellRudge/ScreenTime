@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import AnimatedPressable from './AnimatedPressable';
@@ -7,11 +7,14 @@ import { Show } from '../../data/models/Show';
 import { TrendingItem } from '../../data/models/Trending';
 import { MediaTypes } from '../../utils/config';
 import Theme from '../../utils/theme';
+import RenderIf from './RenderIf';
 
 interface GridProps {
     items: Movie[]|Show[]|TrendingItem[],
     type: MediaTypes,
+    loading?:boolean
     onItemPress: (itemId:number, type?:MediaTypes)=>void,
+    onEnd?:()=>void
 }
 
 interface ItemProps {
@@ -20,26 +23,45 @@ interface ItemProps {
     onPress: (itemId:number, type?:MediaTypes)=>void
 }
 
-const MediaGrid = ({items,type,onItemPress}:GridProps) => {
+const MediaGrid = ({items,type,onItemPress,loading, onEnd}:GridProps) => {
   return (
     <View style={styles.listContainer}>
       <FlatList<TrendingItem|Show|Movie>
         data={items}
+        refreshing={loading}
         showsVerticalScrollIndicator={false}
-        numColumns={2}
+        numColumns={3}
+        onEndReached={onEnd}
         keyExtractor={(item, index)=>(item.id + index).toString()}
         renderItem={ ({item}) =>{
         return <Item item={item} type={type} onPress={onItemPress} />
     }}
+        ListFooterComponent = {()=>{
+            return <RenderIf render={loading!} >
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size={'small'} color={Theme.colors.primary} />
+            </View>
+        </RenderIf>
+        }}
     />
+    
     </View>
   )
 }
 
 const Item = ({item, onPress,type}:ItemProps)=>{
-    return (
-        <View>
-
+    const {vote_average, poster_path} = item
+    if(type == MediaTypes.TRENDING){
+        item = item as TrendingItem
+    }
+    return(
+        <View style={styles.container}>
+            <View style={styles.ratingContainer}>
+                <Text style={styles.rating}>{vote_average.toFixed(1)}</Text>
+            </View>
+            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id,type)}>
+                <FastImage style={styles.image} source={{uri:poster_path}}/>
+            </AnimatedPressable>
         </View>
     )
 }
@@ -50,40 +72,22 @@ const styles = StyleSheet.create({
     listContainer: {
         flex:1,
         width: Theme.screenWidth,
-        height:260,
         paddingHorizontal:5,
-        flexDirection:'column',
     },
     container:{
-        flex:1,
-        width: 140,
-        height:240,
-        marginRight:5,
+        padding:2,
+        width: '33%',
+        height:200,
         flexDirection:'column',
     },
-    labelContainer:{
-        justifyContent:'space-between',
-        flexDirection:'row',
-        paddingEnd:15,
-        marginBottom:5,
-        width:'100%'
-    },
-    label:{
-        fontWeight:'700',
-        fontSize:16,
-        color:Theme.colors.light
-    },
     itemContainer:{
-        width: 140,
-        height:230,
+        flex:1,
         overflow:'hidden',
         borderRadius:12,
         flexDirection:'column',
-        backgroundColor: Theme.colors.backgroundColor2
     },
     image:{
-        width: 140,
-        height:'100%',
+        flex:1
     },
     rating:{
         color:Theme.colors.light,
@@ -111,5 +115,11 @@ const styles = StyleSheet.create({
         borderRadius:5,
         padding:5,
         backgroundColor:Theme.colors.primary
+    },
+    loadingContainer:{
+        width: Theme.screenWidth,
+        height:70,
+        justifyContent:'center',
+        alignItems:'center'
     }
 })

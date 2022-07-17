@@ -12,6 +12,7 @@ import { Browse, GetTrending } from '../../data/network/shared'
 import { TrendingItem } from '../../data/models/Trending'
 import {Item} from '../components/MediaList';
 import LoadingIndicator from '../components/LoadingIndicator';
+import MediaGrid from '../components/MediaGrid'
 
 type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.Browse>;
 
@@ -21,13 +22,29 @@ const BrowseScreen = ({navigation,route}:IProps) => {
   const [page, setPage] = useState<number>(1);
   const [type, setType] = useState<MediaTypes>(route.params.mediaType!)
   const [genre, setGenre] = useState<number>(route.params.genreId!)
+  const [firstLoad, setFirstLoad] = useState<boolean>(true)
+  const [loadingMore, setLoadingMore] = useState<boolean>(false)
+
+  const loadMoreData = async()=>{
+    setLoadingMore(true)
+    await Browse(type,page)
+        .then((data)=>{        
+            setTimeout(()=>{
+              setLoadingMore(false)
+              setData((prevState) =>{
+                return prevState.concat(data)
+              })
+            },1000)
+        })
+  }
 
   const getData = async()=>{
     setLoading(true)
-    await Browse(type,page)
+    await Browse(type,1)
         .then((data)=>{
             setData(data)
             setLoading(false)
+            setFirstLoad(false)
         })
   }
 
@@ -36,11 +53,20 @@ const BrowseScreen = ({navigation,route}:IProps) => {
   },[])
 
   useEffect(()=>{
-
+    if(!firstLoad){
+      loadMoreData();
+    }
   },[page])
 
   const goBack = ()=>{
     navigation.goBack();
+  }
+
+  const loadMore = ()=>{
+    
+    setPage((preState)=>{
+      return preState + 1
+    })
   }
 
   const onItemPress = (itemId: number, itemType?:MediaTypes)=>{
@@ -67,24 +93,14 @@ const BrowseScreen = ({navigation,route}:IProps) => {
         </View>
   }
   else{
-    console.log(data[1]);
-    
     return (
       <View style={styles.screen}>
           <BackButton onPress={goBack} />
           <View style={styles.headerBar}>
-              <Text style={styles.headerBarText}>Browse</Text>
+              <Text style={styles.headerBarText}>{route.params.title!}</Text>
           </View>
           <View style={styles.content}>
-            <FlatList<TrendingItem|Show|Movie>
-              data={data}
-              showsVerticalScrollIndicator={false}
-              numColumns={2}
-              keyExtractor={(item, index)=>(item.id + index).toString()}
-              renderItem={ ({item}) =>{
-                return <Item item={item} type={type} onPress={onItemPress} />
-            }}
-            />
+            <MediaGrid loading={loadingMore} onEnd={loadMore} items={data} onItemPress={onItemPress} type={type} /> 
           </View>
       </View>
     )
@@ -97,30 +113,30 @@ const styles = StyleSheet.create({
     screen:{
         flex:1,
         backgroundColor: Theme.colors.backgroundColor,
-        paddingBottom:20,
     },
     text:{
         color:Theme.colors.light
     },
     headerBar:{
+      zIndex:20,
       height:90,
       width:Theme.screenWidth,
       backgroundColor:Theme.colors.backgroundColor2,
       borderBottomColor:Theme.colors.light,
       flexDirection:'row',
       alignItems:'flex-end',
-      paddingBottom:20,
+      paddingBottom:10,
       justifyContent:'center'
     },
     headerBarText:{
       color:Theme.colors.light,
-      fontSize:Theme.textSize.h2,
+      fontSize:Theme.textSize.h3,
+      fontWeight:'700'
     },
     content:{
-      paddingHorizontal:10,
-      paddingTop:10,
+      paddingTop:5,
       width:Theme.screenWidth,
-      height:'100%',
-      paddingBottom:40,
+      flex:1,
+      paddingBottom:10,
     }
 })
