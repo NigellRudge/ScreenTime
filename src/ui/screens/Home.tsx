@@ -28,7 +28,7 @@ type Props = CompositeScreenProps<
 
 const Home = ({navigation}:Props)=>{
   const [featuredItem, setFeaturedItem] = useState<TrendingItem|{}>({})
-  const [Trending, setTrending] = useState<TrendingItem[]>([])
+  const [trending, setTrending] = useState<TrendingItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [popularMovies, setPopularMovies] = useState<Movie[]>([])
   const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([])
@@ -100,7 +100,7 @@ const Home = ({navigation}:Props)=>{
       <RenderIf render={!loading}>
       <FeaturedItem item={featuredItem}  onPress={()=>{console.log('clicked')}} />
       <View style={styles.content}>
-        <MediaList type={MediaTypes.TRENDING} items={popularMovies} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
+        <MediaList type={MediaTypes.TRENDING} items={trending} label={"Trending"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
         <MediaList type={MediaTypes.MOVIE} items={popularMovies} label={"Popular Movies this week"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
         <MediaList type={MediaTypes.MOVIE} items={nowPlayingMovies} label={"In Theaters now!"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />
         <MediaList type={MediaTypes.SHOW} items={popularShows} label={"Popular Shows"} onItemPress={toItemDetailScreen} onMorePress={browseContent} />

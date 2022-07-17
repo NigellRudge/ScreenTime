@@ -169,3 +169,14 @@ export function prePareContent(input: Movie[]|Show[]):Movie[]|Show[]{
     input = AddMediaUrlToPosterMultiple(input);
     return input;
 }
+
+export function getItemMediaType(input:string):MediaTypes{
+    switch(input.toLowerCase()){
+        case "movie":
+            return MediaTypes.MOVIE;
+        case "tv":
+            return MediaTypes.SHOW;
+        default:
+            return MediaTypes.MOVIE
+    }
+}

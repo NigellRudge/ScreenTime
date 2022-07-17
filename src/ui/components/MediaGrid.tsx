@@ -8,6 +8,8 @@ import { TrendingItem } from '../../data/models/Trending';
 import { MediaTypes } from '../../utils/config';
 import Theme from '../../utils/theme';
 import RenderIf from './RenderIf';
+import { getItemMediaType } from '../../utils/functions';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface GridProps {
     items: Movie[]|Show[]|TrendingItem[],
@@ -53,13 +55,18 @@ const Item = ({item, onPress,type}:ItemProps)=>{
     const {vote_average, poster_path} = item
     if(type == MediaTypes.TRENDING){
         item = item as TrendingItem
+        type = getItemMediaType(item.media_type);
     }
+    let iconName = type == MediaTypes.MOVIE ? 'videocam' : 'tv';
     return(
         <View style={styles.container}>
+            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id,type)}>
             <View style={styles.ratingContainer}>
                 <Text style={styles.rating}>{vote_average.toFixed(1)}</Text>
             </View>
-            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id,type)}>
+            <View style={styles.typeContainer}>
+                <Ionicons size={14} color={Theme.colors.light} name={iconName} />
+            </View>
                 <FastImage style={styles.image} source={{uri:poster_path}}/>
             </AnimatedPressable>
         </View>
@@ -121,5 +128,14 @@ const styles = StyleSheet.create({
         height:70,
         justifyContent:'center',
         alignItems:'center'
+    },
+    typeContainer:{
+        position:'absolute',
+        bottom:5,
+        left:5,
+        zIndex:20,
+        borderRadius:5,
+        padding:5,
+        backgroundColor:Theme.colors.primaryTransparent
     }
 })

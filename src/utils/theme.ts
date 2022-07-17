@@ -10,9 +10,9 @@ const Theme = {
         primaryTransparent: 'rgba(193,66,28,0.78)',
         primaryDark: '#ac4300',
         secondary: '#7f819d',
-        danger: '#fff',
-        success: '#fff',
-        warning: '#fff',
+        danger: '#ff6e63',
+        success: '#00a611',
+        warning: '#ffa938',
         info: '#fff',
         light: '#eeeef2',
         backgroundColor: '#11112c',
@@ -20,6 +20,7 @@ const Theme = {
         backgroundColor2: '#282f53',
         ratingColor: '#fcb100',
         ratingColorGray:'gray',
+
         backgroundColorTransparent: 'rgba(17, 17, 44, 0.7)'
     },
     textSize: {

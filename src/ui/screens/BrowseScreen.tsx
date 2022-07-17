@@ -77,7 +77,7 @@ const BrowseScreen = ({navigation,route}:IProps) => {
           break;
 
         case MediaTypes.SHOW:
-          console.log('hello show')
+          navigation.push(HomeRoutes.ShowDetail,{showId:itemId})
           break;
           
         default:
