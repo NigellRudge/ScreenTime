@@ -9,6 +9,7 @@ import { TrendingItem } from "../data/models/Trending";
 import { MovieDetail } from "../data/models/MovieDetail";
 import { Cast, Credits } from "../data/models/Credits";
 import Theme from "./theme";
+import { ShowdDetail } from "../data/models/ShowDetail";
 
 export function GetMediaUrl (input:string, size: ImageSizes = ImageSizes.NORMAL):string{
     return `${MEDIA_URL}${size}/${input}`
@@ -33,8 +34,8 @@ export function GetEpisodeShortCode(input:Episode | Episode[]): Episode | Episod
 }
 
 
-export function AddMediaUrlToPoster(input:Movie|Show|MovieDetail):Movie|Show|MovieDetail{
-    input.poster_path = GetMediaUrl(input.poster_path)
+export function AddMediaUrlToPoster(input:Movie|Show|MovieDetail|ShowdDetail, size:ImageSizes=ImageSizes.NORMAL):Movie|Show|MovieDetail|ShowdDetail{
+    input.poster_path = GetMediaUrl(input.poster_path,size)
     return input;
 }
 
@@ -45,7 +46,7 @@ export function AddMediaUrlToPosterMultiple(input:Movie[]|Show[]):Show[]|Movie[]
     return input;
 }
 
-export function AddMediaUrlToBackdrop(input:Movie|Show|MovieDetail, size:ImageSizes = ImageSizes.NORMAL):Movie|Show|MovieDetail{
+export function AddMediaUrlToBackdrop(input:Movie|Show|MovieDetail|ShowdDetail, size:ImageSizes = ImageSizes.NORMAL):Movie|Show|MovieDetail|ShowdDetail{
     input.backdrop_path = GetMediaUrl(input.backdrop_path!,size)
     return input;
 }
@@ -179,4 +180,8 @@ export function getItemMediaType(input:string):MediaTypes{
         default:
             return MediaTypes.MOVIE
     }
+}
+
+export function getYearFromDate(input:string):string{
+    return new Date(input).getFullYear().toString();
 }

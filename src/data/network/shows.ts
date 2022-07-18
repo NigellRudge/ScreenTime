@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API_KEY, BASE_URL } from "../../utils/config";
+import { API_KEY, BASE_URL, ImageSizes } from "../../utils/config";
 import { ShowResponse } from "../models/Show";
 import { ParamType } from "./types";
 import { Show } from '../models/Show';
 import { Season } from '../models/Season'
 import { ShowdDetail } from "../models/ShowDetail";
-import { AddMediaUrlToPosterMultiple } from "../../utils/functions";
+import { AddMediaUrlToBackdrop, AddMediaUrlToPoster, AddMediaUrlToPosterMultiple } from "../../utils/functions";
 import { prePareContent } from "../../utils/functions";
 
 export async function GetPopularShows(page:number = 1):Promise<Show[]> {
@@ -17,7 +17,7 @@ export async function GetPopularShows(page:number = 1):Promise<Show[]> {
     }
     return await axios.get<ShowResponse>(url, {params:params})
                 .then((response)=>{
-                    response.data.results = AddMediaUrlToPosterMultiple(response.data.results)
+                    response.data.results = AddMediaUrlToPosterMultiple(response.data.results) as Show[]
                     return response.data.results; 
                 })   
                 .catch((error)=>{
@@ -35,7 +35,7 @@ export async function GetNowAiringShows(page:number = 1): Promise<Show[]>{
     }
     return await axios.get<ShowResponse>(url, {params:params})
                 .then((response)=>{
-                    response.data.results = AddMediaUrlToPosterMultiple(response.data.results)
+                    response.data.results = AddMediaUrlToPosterMultiple(response.data.results) as Show[]
                     return response.data.results; 
                 })   
                 .catch((error)=>{
@@ -88,6 +88,8 @@ export async function GetShowDetails(showId: number): Promise<ShowdDetail| {}>{
     }
     return await axios.get<ShowdDetail>(url, {params:params})
                 .then((response)=>{
+                    response.data = AddMediaUrlToBackdrop(response.data,ImageSizes.LARGE) as ShowdDetail
+                    response.data = AddMediaUrlToPoster(response.data,ImageSizes.LARGE) as ShowdDetail
                     return response.data; 
                 })   
                 .catch((error)=>{
