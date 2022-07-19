@@ -7,44 +7,58 @@ import { BaseStackParamList } from '../stacks/BaseStack';
 import { HomeRoutes } from '../../utils/routes';
 import { ShowdDetail } from '../../data/models/ShowDetail';
 import { Show } from '../../data/models/Show';
-import { GetShowDetails } from '../../data/network/shows';
+import { GetShowDetails, GetSimilar } from '../../data/network/shows';
 import LoadingIndicator from '../components/LoadingIndicator';
 import FastImage from 'react-native-fast-image';
 import Theme from '../../utils/theme';
 import WatchNowButton from '../components/WatchNowButton';
 import AddToPlaylistButton from '../components/AddToPlaylistButton';
-import { getYearFromData, getYearFromDate } from '../../utils/functions';
+import { calculateAverageRunTime, formatReleaseDate, formatRuntime, getYearFromDate } from '../../utils/functions';
+import { MediaList, Pill } from '../components';
+import IconTextCombo from '../components/IconTextCombo';
+import CreditList from '../components/CreditList';
+import { CreditTypes, MediaTypes } from '../../utils/config';
+import SeasonList from '../components/SeasonList';
 
 
 
 type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.ShowDetail>;
 
 const ShowDetailScreen = ({navigation, route}:IProps) => {
-    const [data, setData] = useState<ShowdDetail>({})
-    const [loading, setLoading] = useState<boolean>(false)
+    const [showDetail, setShowDetail] = useState<ShowdDetail>({})
+    const [loading, setLoading] = useState<boolean>(true)
     const [similarShows, setSimilarShows] = useState<Show[]>([]) 
 
     const loadData = async ()=>{
         setLoading(true)
         return await GetShowDetails(route.params.showId)
             .then((responseData)=>{
-                setData(responseData)
-                console.log(responseData.backdrop_path);
-                
-            })
-            .then(()=>{
-                setLoading(false);
+                setShowDetail(responseData as ShowdDetail)
+            })   
+    }
+
+    const getSimilarData = async()=>{
+        return await GetSimilar(route.params.showId)
+            .then((response)=>{
+                setSimilarShows(response)
             })
     }
 
+    
     useEffect(()=>{ 
-        loadData();
+        loadData()
+            .then(()=>{
+                getSimilarData()
+                    .then(()=>{
+                        setLoading(false);
+                    })
+            })
     },[])
 
     const goBack = ()=>{
         navigation.goBack()
     }
-    if(loading){
+    if(loading){  
         return (
             <Screen>
                 <LoadingIndicator active={loading} />
@@ -57,19 +71,38 @@ const ShowDetailScreen = ({navigation, route}:IProps) => {
                 <BackButton onPress={goBack} />
                 <ScrollView bounces={false} alwaysBounceVertical={false}>
                     <View style={styles.headerContainer}>
-                        <FastImage resizeMode={'cover'} source={{uri:data.backdrop_path}} style={styles.headerImage} />
+                        <FastImage resizeMode={'cover'} source={{uri:showDetail.backdrop_path}} style={styles.headerImage} />
                         <View style={styles.headerTextContainer}>
-                            <Text style={styles.headerText}>{data.name}</Text>
-                            <Text style={styles.subTitle}>({getYearFromDate(data.first_air_date)})</Text>
+                            <Text style={styles.headerText}>{showDetail.name}</Text>
+                            <Text style={styles.subTitle}>({getYearFromDate(showDetail.first_air_date)})</Text>
                         </View>
-                        <View style={styles.infoTextContainer}>
-                            
+                        <View style={{flexDirection:'row', padding:5}}>
+                            {showDetail.genres.slice(0,3).map((item, index)=>{
+                                return <Pill text={item.name} color={Theme.colors.primary} key={(item.id+index).toString()}/>
+                            })}
+                        </View>
+                        <View style={{flexDirection:'row', width:'80%', paddingHorizontal:20, paddingVertical:5, justifyContent:'space-between'}}>
+                            <IconTextCombo containerStyle={{flexDirection:'row'}} iconName='star' iconSize={16} text={showDetail.vote_average} />
+                            <IconTextCombo containerStyle={{flexDirection:'row'}} iconName='time' iconColor={Theme.colors.secondary} iconSize={16} text={calculateAverageRunTime(showDetail.episode_run_time)} />
+                            <IconTextCombo containerStyle={{flexDirection:'row'}} iconName='calendar' iconColor={Theme.colors.secondary} iconSize={16} text={formatReleaseDate(showDetail.first_air_date)} />    
                         </View>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'center'}}>
-                        <WatchNowButton containerStyle={{ width:'45%'}} />
-                        <AddToPlaylistButton containerStyle={{ width:'45%'}} />          
+                    <View style={{flexDirection:'column',paddingHorizontal:10, paddingBottom:30}}>
+                        <View style={{flexDirection:'row',justifyContent:'center'}}>
+                            <WatchNowButton containerStyle={{ width:'45%'}} />
+                            <AddToPlaylistButton containerStyle={{ width:'45%'}} />          
+                        </View>
+                        <View style={{flexDirection:'column', marginTop:10}}>
+                            <Text style={{color:Theme.colors.light,fontSize:Theme.textSize.h4, marginBottom:5, fontWeight:'700'}}>Synopsis</Text>
+                            <Text style={{color:Theme.colors.light, fontSize:Theme.textSize.h5 * 0.95}}>{showDetail.overview}</Text>
+                        </View>
+                        <View style={{flexDirection:'column', paddingVertical:10}}>
+                            <CreditList text="Cast" items={showDetail.credits.cast} type={CreditTypes.CAST} />
+                        </View>
+                        <SeasonList label='Seasons' items={showDetail.seasons} onItemPress={()=>console.log('hello')} />
+                        <MediaList type={MediaTypes.SHOW} label='Similar Shows' items={similarShows} onItemPress={()=>console.log('pressed')} />
                     </View>
+                    
                 </ScrollView>
             </Screen>
         )
@@ -83,6 +116,7 @@ const styles = StyleSheet.create({
         width:Theme.screenWidth,
         height:400,
         flexDirection:'column',
+        marginBottom:5,
 
     },
     headerTextContainer:{

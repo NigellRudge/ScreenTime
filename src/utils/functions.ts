@@ -1,5 +1,5 @@
 import { Movie } from "../data/models/Movie";
-import { Crew, Episode } from "../data/models/Season";
+import { Crew, Episode, Season, SeasonShort } from "../data/models/Season";
 import { Show } from "../data/models/Show";
 import { ImageSizes, MediaTypes, MEDIA_URL, months } from "./config";
 import { Backdrop } from "../data/models/Backdrop";
@@ -34,14 +34,14 @@ export function GetEpisodeShortCode(input:Episode | Episode[]): Episode | Episod
 }
 
 
-export function AddMediaUrlToPoster(input:Movie|Show|MovieDetail|ShowdDetail, size:ImageSizes=ImageSizes.NORMAL):Movie|Show|MovieDetail|ShowdDetail{
+export function AddMediaUrlToPoster(input:Movie|Show|MovieDetail|ShowdDetail|Season, size:ImageSizes=ImageSizes.NORMAL):Movie|Show|MovieDetail|ShowdDetail|Season{
     input.poster_path = GetMediaUrl(input.poster_path,size)
     return input;
 }
 
-export function AddMediaUrlToPosterMultiple(input:Movie[]|Show[]):Show[]|Movie[]{
+export function AddMediaUrlToPosterMultiple(input:Movie[]|Show[]|SeasonShort[], size:ImageSizes = ImageSizes.LARGE):Show[]|Movie[]|SeasonShort[]{
     for(let item of input){
-        item.poster_path = GetMediaUrl(item.poster_path)
+        item.poster_path = GetMediaUrl(item.poster_path,size)
     }
     return input;
 }
@@ -184,4 +184,12 @@ export function getItemMediaType(input:string):MediaTypes{
 
 export function getYearFromDate(input:string):string{
     return new Date(input).getFullYear().toString();
+}
+
+export function calculateAverageRunTime(input:number[]):string{
+    let temp = 0
+    let sum = input.reduce((prev,next)=>{
+        return prev + next;
+    },temp)
+    return formatRuntime(sum);
 }

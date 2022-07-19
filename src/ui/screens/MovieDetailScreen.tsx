@@ -42,7 +42,7 @@ const MovieDetailScreen = ({navigation,route}:IProps) => {
   } 
   
   const getSimilarMovies = async ()=>{
-    return await GetSimilar(MovieID)
+    return await GetSimilar(route.params.movieId)
       .then((data)=>{
           setSimilarMovies(data)
       })

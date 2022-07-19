@@ -27,6 +27,11 @@ The tools, pakages used in this project are:
 - [ ] Dark and Light Mode
 - [ ] Store sensitive information in .env file
 - [ ] Offline support/ Cache
+- [ ] Play Videos
+- [ ] Image Gallery
+- [ ] Playlist (Local Storage)
+- [ ] Refresh Layout
+- [ ] Check Network Status
 
 | HomePage  |MovieDetailPage|
 | ------------- | ------------- |
