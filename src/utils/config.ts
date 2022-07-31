@@ -11,7 +11,8 @@ export enum MediaTypes {
     ACTOR = 'actor',
     IMAGE = 'image',
     ALL = 'all',
-    TRENDING = 'trending'
+    TRENDING = 'trending',
+    EPISODE = 'episode'
 }
 
 export enum CreditTypes {

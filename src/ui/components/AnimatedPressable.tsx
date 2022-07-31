@@ -27,7 +27,9 @@ const AnimatedPressable = ({children, handler, item, containerStyle}:IPros) => {
                 useNativeDriver:true
             })
         ]).start(()=>{
-            handler!(item)
+            if(handler){
+                handler!(item)
+            }
         })
     }
 

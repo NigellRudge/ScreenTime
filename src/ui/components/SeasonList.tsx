@@ -47,7 +47,7 @@ const SeasonList = ({items, onItemPress, label, onMorePress,showId}:ListProps) =
 const Item = ({item, onPress}:ItemProps)=>{
     return (
         <View style={styles.itemContainer}>
-            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.id)}>
+            <AnimatedPressable containerStyle={styles.itemContainer} handler={()=>onPress(item.season_number)}>
                 <FastImage style={styles.image} source={{uri:item.poster_path}}/>
                 <View style={styles.numberContainer}>
                     <Text style={styles.number}>Season {item.season_number}</Text>

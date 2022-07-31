@@ -9,12 +9,17 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 import { MediaTypes } from '../../utils/config';
 import BrowseScreen from '../screens/BrowseScreen';
 import ShowDetailScreen from '../screens/ShowDetailScreen';
+import SeasonInfoScreen from '../screens/SeasonInfoScreen';
+import EpisodeDetail from '../screens/EpisodeDetail';
+import { ShowParam } from '../../data/models/Season';
 
 export type BaseStackParamList = {
     [HomeRoutes.Tabs]:NavigatorScreenParams<TabRoutesParamList>,
     [HomeRoutes.MovieDetail]:{movieId:number}
     [HomeRoutes.ShowDetail]:{showId:number}
     [HomeRoutes.Browse]:{mediaType:MediaTypes,genreId?:number, title?: String}
+    [HomeRoutes.SeasonDetail]:{show:ShowParam,seasonNumber:number}
+    [HomeRoutes.EpisodeDetail]:{showId:number,seasonNumber:number,episodeNumber:number}
 }
 const Stack = createNativeStackNavigator<BaseStackParamList>()
 
@@ -29,6 +34,8 @@ const BaseStack = () => {
         <Screen name={HomeRoutes.MovieDetail} component={MovieDetailScreen} initialParams={{movieId:299534}} />
         <Screen name={HomeRoutes.ShowDetail} component={ShowDetailScreen} initialParams={{showId:299534}} />
         <Screen name={HomeRoutes.Browse} component={BrowseScreen} initialParams={{mediaType:MediaTypes.TRENDING, title:"Trending"}} />
+        <Screen name={HomeRoutes.SeasonDetail} component={SeasonInfoScreen}/>
+        <Screen name={HomeRoutes.EpisodeDetail} component={EpisodeDetail}/>
     </Navigator>
   )
 }

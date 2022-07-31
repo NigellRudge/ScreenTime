@@ -10,9 +10,12 @@ import Theme from '../../utils/theme';
 import RenderIf from './RenderIf';
 import { getItemMediaType } from '../../utils/functions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Episode } from '../../data/models/Season';
+
+// TODO: Add layout animations with React Native reanimated
 
 interface GridProps {
-    items: Movie[]|Show[]|TrendingItem[],
+    items: Movie[]|Show[]|TrendingItem[]|Episode[],
     type: MediaTypes,
     loading?:boolean
     onItemPress: (itemId:number, type?:MediaTypes)=>void,
@@ -20,7 +23,7 @@ interface GridProps {
 }
 
 interface ItemProps {
-    item: Movie | Show |TrendingItem
+    item: Movie | Show |TrendingItem | Episode
     type:MediaTypes
     onPress: (itemId:number, type?:MediaTypes)=>void
 }
@@ -28,7 +31,7 @@ interface ItemProps {
 const MediaGrid = ({items,type,onItemPress,loading, onEnd}:GridProps) => {
   return (
     <View style={styles.listContainer}>
-      <FlatList<TrendingItem|Show|Movie>
+      <FlatList<TrendingItem|Show|Movie|Episode>
         data={items}
         refreshing={loading}
         showsVerticalScrollIndicator={false}
@@ -52,7 +55,10 @@ const MediaGrid = ({items,type,onItemPress,loading, onEnd}:GridProps) => {
 }
 
 const Item = ({item, onPress,type}:ItemProps)=>{
-    const {vote_average, poster_path} = item
+    const poster_path = (type == MediaTypes.EPISODE) ? (item as Episode).still_path : (item as Movie|Show|TrendingItem).poster_path
+    console.log(poster_path);
+    
+    const {vote_average} = item
     if(type == MediaTypes.TRENDING){
         item = item as TrendingItem
         type = getItemMediaType(item.media_type);

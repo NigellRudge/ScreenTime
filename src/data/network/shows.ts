@@ -5,7 +5,7 @@ import { ParamType } from "./types";
 import { Show } from '../models/Show';
 import { Season, SeasonShort } from '../models/Season'
 import { ShowdDetail } from "../models/ShowDetail";
-import { AddMediaUrlToBackdrop, AddMediaUrlToCastorCrew, AddMediaUrlToPoster, AddMediaUrlToPosterMultiple, LimitArray } from "../../utils/functions";
+import { AddMediaUrlToBackdrop, AddMediaUrlToCastorCrew, AddMediaUrlToPoster, AddMediaUrlToPosterMultiple, addMediaUrlToStillPath, LimitArray } from "../../utils/functions";
 import { prePareContent } from "../../utils/functions";
 import { Cast, Crew } from "../models/Credits";
 
@@ -122,13 +122,14 @@ export async function GetSimilar(showId:number, page:number=1): Promise<Show[]|[
 }
 
 export async function GetSeasonDetails(showId: number, seasonNumber: number): Promise<Season|{}>{
-    let url = `tv/${showId}/season/${seasonNumber}`;
+    let url = `${BASE_URL}tv/${showId}/season/${seasonNumber}`;
     let params: ParamType = {
         api_key: API_KEY,
         append_to_response:'images'
     }
     return await axios.get<Season>(url, {params:params})
                 .then((response)=>{
+                    response.data.episodes = addMediaUrlToStillPath(response.data.episodes);
                     return response.data; 
                 })   
                 .catch((error)=>{

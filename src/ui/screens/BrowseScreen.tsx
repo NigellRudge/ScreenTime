@@ -14,6 +14,8 @@ import {Item} from '../components/MediaList';
 import LoadingIndicator from '../components/LoadingIndicator';
 import MediaGrid from '../components/MediaGrid'
 
+// TODO: Implement Pull to Refresh
+
 type IProps = NativeStackScreenProps<BaseStackParamList,HomeRoutes.Browse>;
 
 const BrowseScreen = ({navigation,route}:IProps) => {

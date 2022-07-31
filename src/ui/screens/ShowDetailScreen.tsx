@@ -37,6 +37,16 @@ const ShowDetailScreen = ({navigation, route}:IProps) => {
             })   
     }
 
+    const toSeasonDetail = (seasonNumber:number)=>{
+        let show = {
+            id:route.params.showId,
+            backdrop_path: showDetail.backdrop_path,
+            poster_path: showDetail.poster_path,
+            name:showDetail.name
+        }
+        navigation.push(HomeRoutes.SeasonDetail,{seasonNumber:seasonNumber,show:show})
+    }
+
     const getSimilarData = async()=>{
         return await GetSimilar(route.params.showId)
             .then((response)=>{
@@ -99,7 +109,7 @@ const ShowDetailScreen = ({navigation, route}:IProps) => {
                         <View style={{flexDirection:'column', paddingVertical:10}}>
                             <CreditList text="Cast" items={showDetail.credits.cast} type={CreditTypes.CAST} />
                         </View>
-                        <SeasonList label='Seasons' items={showDetail.seasons} onItemPress={()=>console.log('hello')} />
+                        <SeasonList label='Seasons' items={showDetail.seasons} onItemPress={toSeasonDetail} />
                         <MediaList type={MediaTypes.SHOW} label='Similar Shows' items={similarShows} onItemPress={()=>console.log('pressed')} />
                     </View>
                     

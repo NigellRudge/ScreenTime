@@ -12,7 +12,7 @@ import Theme from "./theme";
 import { ShowdDetail } from "../data/models/ShowDetail";
 
 export function GetMediaUrl (input:string, size: ImageSizes = ImageSizes.NORMAL):string{
-    return `${MEDIA_URL}${size}/${input}`
+    return `${MEDIA_URL}${size}${input}`
 }
 
 export function GetEpisodeShortCode(input:Episode | Episode[]): Episode | Episode[]{
@@ -166,7 +166,7 @@ export function getCorrectTextSize(input:string):number{
     return size;
 }
 
-export function prePareContent(input: Movie[]|Show[]):Movie[]|Show[]{
+export function prePareContent(input: Movie[]|Show[]|SeasonShort[]):Movie[]|Show[]|SeasonShort[]{
     input = AddMediaUrlToPosterMultiple(input);
     return input;
 }
@@ -192,4 +192,19 @@ export function calculateAverageRunTime(input:number[]):string{
         return prev + next;
     },temp)
     return formatRuntime(sum);
+}
+
+
+export function addMediaUrlToStillPath(input:Episode[]):Episode[]{
+    for(let item of input){
+        item.still_path = GetMediaUrl(item.still_path);
+    }
+    return input;
+
+}
+
+export function limitString(input:string,limit:number):string{
+    if(input.length < limit)
+        return input;
+    return input.slice(0,limit);
 }

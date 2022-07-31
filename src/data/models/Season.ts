@@ -10,6 +10,13 @@ export interface SeasonShort {
     season_number: number
   }
 
+export interface ShowParam {
+  id:number,
+  backdrop_path:string,
+  poster_path:string,
+  name:string
+}  
+
   export interface Season {
     _id: string
     air_date: string
@@ -39,6 +46,10 @@ export interface SeasonShort {
     episode_code?:string
   }
   
+  export interface EpisodeInfo {
+
+  }
+
   export interface Crew {
     job: string
     department: string
